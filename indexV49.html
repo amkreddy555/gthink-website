@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gthink Inventors | Future Living</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* =========================================
+           1. CORE VARIABLES (ECO-LUXE THEME)
+           ========================================= */
+        :root {
+            /* BRAND COLORS */
+            --primary: #059669;       /* Deep Emerald */
+            --primary-light: #34d399; /* Bright Mint */
+            --primary-glow: rgba(16, 185, 129, 0.3);
+            --accent: #2563eb;        /* Royal Blue */
+            
+            /* BACKGROUNDS */
+            --bg-white: #ffffff;
+            --bg-off-white: #E3E6E1;  /* Porcelain */
+            --bg-glass: rgba(255, 255, 255, 0.90);
+            --bg-footer: #000000;     /* Pitch Black */
+            
+            /* TYPOGRAPHY */
+            --text-dark: #1e293b;     /* Slate 900 */
+            --text-gray: #64748b;     /* Slate 500 */
+            --text-light: #f8fafc;    /* Slate 50 */
+            
+            /* UI ELEMENTS */
+            --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.04);
+            --shadow-hover: 0 20px 40px rgba(5, 150, 105, 0.12);
+            --border-light: 1px solid rgba(0,0,0,0.06);
+            
+            --trans: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Manrope', sans-serif; scroll-behavior: smooth; }
+        
+        html { scroll-padding-top: 80px; }
+        
+        body {
+            background-color: var(--bg-white);
+            color: var(--text-dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; transition: var(--trans); }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* =========================================
+           2. UTILITIES
+           ========================================= */
+        /* SLEEK SEPARATOR (1px Gradient) */
+        .separator-line {
+            width: 100%; height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary-light), transparent);
+            opacity: 0.5; margin: 0 auto;
+        }
+
+        /* Unified Card Styling */
+        .luxe-card {
+            background: #fff;
+            border-radius: 16px;
+            border: var(--border-light);
+            box-shadow: var(--shadow-soft);
+            transition: var(--trans);
+            overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .luxe-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--primary-light);
+            box-shadow: var(--shadow-hover);
+        }
+
+        /* FIXED PRELOADER */
+        .preloader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #fff; z-index: 99999;
+            display: flex; justify-content: center; align-items: center;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+        .loader-content { display: flex; flex-direction: column; align-items: center; }
+        .loader-logo { font-size: 2.5rem; font-weight: 800; color: var(--text-dark); letter-spacing: -1px; margin-bottom: 15px; }
+        .loader-logo span { color: var(--primary); }
+        .loader-line {
+            width: 0; height: 4px; background: var(--primary); border-radius: 2px;
+            animation: load 1.5s forwards ease-in-out;
+        }
+        @keyframes load { 0% { width: 0; } 100% { width: 150px; } }
+        .preloader.fade-out { opacity: 0; visibility: hidden; pointer-events: none; }
+
+        /* Reveal Animation */
+        .reveal { opacity: 0; transform: translateY(30px); transition: 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+        .delay-100 { transition-delay: 0.1s; }
+        .delay-200 { transition-delay: 0.2s; }
+        .delay-300 { transition-delay: 0.3s; }
+
+        /* =========================================
+           3. NAVIGATION
+           ========================================= */
+        .navbar {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; height: 80px; width: 100%;
+            background: var(--bg-glass);
+            position: sticky; top: 0; z-index: 1000;
+            backdrop-filter: blur(20px);
+            border-bottom: var(--border-light);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+        }
+        .logo { font-size: 1.6rem; font-weight: 800; color: var(--text-dark); letter-spacing: -0.5px; }
+        .logo span { color: var(--primary); }
+        
+        .nav-links { display: flex; gap: 2.5rem; }
+        .nav-links a { 
+            font-size: 0.9rem; font-weight: 600; color: var(--text-dark); 
+            position: relative; padding: 5px 0; letter-spacing: 0.5px;
+        }
+        
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 0; height: 2px;
+            background: var(--primary); transition: var(--trans);
+        }
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+        .nav-links a:hover::after, .nav-links a.active::after { width: 100%; }
+        
+        .btn-nav { 
+            background: var(--text-dark); padding: 0.7rem 1.5rem; border-radius: 50px; 
+            font-weight: 700; color: #fff; font-size: 0.9rem; border: none; cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); transition: var(--trans);
+        }
+        .btn-nav:hover { background: var(--primary); transform: translateY(-2px); box-shadow: var(--shadow-hover); }
+        
+        .hamburger { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-dark); }
+
+        .desktop-link { display: block; }
+        .mobile-link { display: none; }
+
+        /* =========================================
+           4. HERO SECTION
+           ========================================= */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            text-align: center; position: relative; padding: 0 5%; overflow: hidden;
+            margin-top: -80px; padding-top: 80px; padding-bottom: 140px; /* Space for Stats */
+        }
+        .hero-slider, .hero-slide, .hero-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+        .hero-slider { z-index: -2; }
+        .hero-slide { background-size: cover; background-position: center; opacity: 0; transition: opacity 1.5s ease; transform: scale(1.1); }
+        .hero-slide.active { opacity: 1; transform: scale(1); transition: opacity 1.5s ease, transform 6s ease; }
+        
+        .hero-overlay { background: linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.85) 100%); z-index: -1; }
+        
+        .hero-content { z-index: 2; position: relative; max-width: 900px; color: #fff; margin-bottom: 3rem; }
+        .hero-badge {
+            background: rgba(255,255,255,0.15); backdrop-filter: blur(10px);
+            padding: 8px 20px; border-radius: 30px; font-size: 0.8rem; font-weight: 700;
+            display: inline-block; margin-bottom: 1.5rem; border: 1px solid rgba(255,255,255,0.3);
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .hero-content h1 { font-size: 4rem; line-height: 1.1; margin-bottom: 1.5rem; font-weight: 800; letter-spacing: -1px; }
+        .hero-content h1 span { background: linear-gradient(to right, #34d399, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero-content p { color: #e2e8f0; font-size: 1.25rem; margin-bottom: 2.5rem; font-weight: 400; max-width: 700px; margin-left: auto; margin-right: auto; }
+
+        /* =========================================
+           5. FLOATING STATS
+           ========================================= */
+        .stats-wrapper {
+            position: relative; z-index: 20; width: 90%; max-width: 1200px;
+            margin: -100px auto 4rem auto; 
+        }
+        .stats-card {
+            background: #ffffff; padding: 3rem 5%;
+            display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem; text-align: center;
+            border-radius: 20px; box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            border: 1px solid #fff;
+        }
+        .stat-item h2 { font-size: 3.5rem; color: var(--primary); margin-bottom: 0; line-height: 1; font-weight: 800; letter-spacing: -2px; }
+        .stat-item p { color: var(--text-dark); font-weight: 700; font-size: 1rem; margin-top: 0.5rem; text-transform: uppercase; letter-spacing: 1px; }
+
+        /* =========================================
+           6. SECTIONS CONFIG
+           ========================================= */
+        section { padding: 6rem 5%; position: relative; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header span { color: var(--primary); font-weight: 700; font-size: 0.85rem; letter-spacing: 2px; text-transform: uppercase; display: block; margin-bottom: 0.5rem; }
+        .section-header h2 { font-size: 2.5rem; color: var(--text-dark); font-weight: 800; letter-spacing: -1px; }
+
+        /* =========================================
+           7. SOLUTIONS (Off-White)
+           ========================================= */
+        #solutions { background-color: var(--bg-off-white); }
+        .sectors-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        
+        .sector-card { height: 420px; position: relative; overflow: hidden; }
+        .sector-bg { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; }
+        .luxe-card:hover .sector-bg { transform: scale(1.1); }
+        .sector-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.2) 100%); }
+        .sector-content { position: absolute; bottom: 0; left: 0; width: 100%; padding: 2.5rem; transform: translateY(60px); transition: var(--trans); }
+        .luxe-card:hover .sector-content { transform: translateY(0); }
+        
+        .sector-icon { font-size: 2rem; color: var(--primary-light); margin-bottom: 1rem; background: rgba(255,255,255,0.1); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 50%; backdrop-filter: blur(5px); }
+        .sector-content h3 { font-size: 1.5rem; margin-bottom: 0.5rem; color: #fff; font-weight: 700; }
+        .sector-content p { color: #e2e8f0; font-size: 0.95rem; margin-bottom: 1rem; line-height: 1.6; }
+        .sector-features li { color: #cbd5e1; font-size: 0.9rem; display: flex; align-items: center; margin-bottom: 0.4rem; }
+        .sector-features li i { color: var(--primary-light); margin-right: 10px; }
+
+        /* =========================================
+           8. PRODUCTS (White - 4 Grid)
+           ========================================= */
+        #products { background-color: var(--bg-white); }
+        .product-grid { display: grid; gap: 2.5rem; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+        @media (min-width: 1200px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
+
+        .pro-card { height: 100%; }
+        .pro-img-box { height: 240px; overflow: hidden; border-bottom: 1px solid #f1f5f9; position: relative; }
+        .pro-img-box img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s ease; }
+        .luxe-card:hover .pro-img-box img { transform: scale(1.1); }
+        
+        .pro-card-content { padding: 1.5rem; flex-grow: 1; display: flex; flex-direction: column; background: #fff; }
+        .tag { font-size: 0.7rem; color: var(--primary); background: rgba(16, 185, 129, 0.1); padding: 5px 12px; border-radius: 20px; font-weight: 700; align-self: flex-start; margin-bottom: 1rem; }
+        .pro-card-content h3 { font-size: 1.2rem; color: var(--text-dark); margin-bottom: 0.5rem; font-weight: 700; }
+        .pro-card-content p { font-size: 0.9rem; color: var(--text-gray); margin-bottom: 1.5rem; flex-grow: 1; }
+        
+        .pro-btn { width: 100%; padding: 0.8rem; background: #fff; border: 1px solid var(--text-dark); color: var(--text-dark); font-weight: 700; border-radius: 10px; cursor: pointer; transition: var(--trans); margin-top: auto; }
+        .pro-btn:hover { background: var(--text-dark); color: #fff; }
+
+        /* =========================================
+           9. VIDEO PLAYLIST (Off-White)
+           ========================================= */
+        #videos { background-color: var(--bg-off-white); }
+        .video-wrapper { display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; height: 500px; }
+
+        .main-video-container {
+            background: #000; border-radius: 20px; overflow: hidden;
+            box-shadow: var(--shadow-hover); position: relative;
+        }
+        .main-video-frame { width: 100%; height: 100%; }
+
+        .playlist-container {
+            background: #fff; border-radius: 20px; border: var(--border-light);
+            overflow-y: auto; padding: 1.5rem; box-shadow: var(--shadow-soft);
+        }
+        .playlist-header {
+            font-size: 1.1rem; font-weight: 800; color: var(--text-dark);
+            margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid #e2e8f0;
+        }
+
+        .playlist-item {
+            display: flex; gap: 1rem; cursor: pointer; padding: 10px; border-radius: 10px; transition: var(--trans); margin-bottom: 0.5rem;
+        }
+        .playlist-item:hover { background: #f1f5f9; }
+        .playlist-item.active { background: rgba(16, 185, 129, 0.1); border: 1px solid var(--primary-light); }
+        
+        .playlist-thumb-box { position: relative; width: 80px; height: 50px; flex-shrink: 0; }
+        .playlist-thumb { width: 100%; height: 100%; border-radius: 6px; object-fit: cover; background: #000; }
+        .play-overlay { 
+            position: absolute; top:0; left:0; width:100%; height:100%; 
+            display: flex; align-items: center; justify-content: center; 
+            background: rgba(0,0,0,0.3); border-radius: 6px; color: #fff; font-size: 0.8rem;
+        }
+        
+        .playlist-info h4 { font-size: 0.9rem; font-weight: 700; color: var(--text-dark); margin-bottom: 2px; line-height: 1.3; }
+        .playlist-info span { font-size: 0.75rem; color: var(--text-gray); }
+
+        /* =========================================
+           10. TESTIMONIALS (White)
+           ========================================= */
+        #reviews { background-color: var(--bg-white); overflow: hidden; }
+        
+        .testi-scroller-container {
+            width: 100%; overflow: hidden; position: relative;
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+            mask-image: linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%);
+        }
+        .testi-track { display: flex; gap: 2rem; width: max-content; animation: scrollHorizontal 45s linear infinite; padding: 1rem 0; }
+        .testi-track:hover { animation-play-state: paused; }
+        @keyframes scrollHorizontal { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        .testi-card { 
+            width: 380px; padding: 2.5rem; flex-shrink: 0; background: var(--bg-off-white); 
+            border: 1px solid #e2e8f0; border-radius: 16px;
+        }
+        .quote-icon { position: absolute; top: 20px; right: 20px; font-size: 2rem; color: #cbd5e1; }
+        .stars { color: #f59e0b; margin-bottom: 1rem; }
+        .testi-text { color: var(--text-dark); font-style: italic; margin-bottom: 1.5rem; font-size: 1rem; line-height: 1.6; }
+        .testi-author { display: flex; align-items: center; gap: 1rem; }
+        .author-avatar { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; border: 2px solid var(--primary-light); }
+        .author-info h4 { font-size: 1rem; margin: 0; color: var(--text-dark); font-weight: 700; }
+        .author-info span { font-size: 0.8rem; color: var(--primary); font-weight: 600; }
+
+        /* =========================================
+           11. ABOUT US (Off-White)
+           ========================================= */
+        #about { background-color: var(--bg-off-white); }
+        .about-split { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; margin-bottom: 5rem; }
+        .about-text h3 { font-size: 2.5rem; line-height: 1.2; margin-bottom: 1.5rem; font-weight: 800; color: var(--text-dark); }
+        .story-highlight { border-left: 4px solid var(--primary); padding: 1.5rem; margin: 2rem 0; background: #fff; color: var(--text-dark); font-weight: 600; border-radius: 0 10px 10px 0; box-shadow: var(--shadow-soft); }
+        .about-img { width: 100%; border-radius: 20px; box-shadow: var(--shadow-hover); }
+        
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+        .team-card { text-align: center; padding: 2.5rem; background: #fff; } 
+        .team-card img { width: 100px; height: 100px; border-radius: 50%; margin: 0 auto 1.5rem; border: 3px solid var(--primary-light); object-fit: cover; }
+        .team-card h4 { font-size: 1.1rem; color: var(--text-dark); margin-bottom: 0.3rem; font-weight: 700; }
+        .team-card span { font-size: 0.9rem; color: var(--text-gray); }
+
+        /* =========================================
+           12. SUPPORT SECTION (Soft Blue Tint)
+           ========================================= */
+        #support { background: linear-gradient(135deg, #f8fafc, #eff6ff); }
+        .support-grid { display: grid; gap: 4rem; }
+        @media (min-width: 992px) { .support-grid { grid-template-columns: 1fr 1fr; align-items: start; } }
+
+        .faq-wrapper h3 { margin-bottom: 1.5rem; color: var(--text-dark); font-size: 1.8rem; font-weight: 700; }
+        .faq-item { border-radius: 12px; overflow: hidden; transition: var(--trans); border: 1px solid #e2e8f0; background: #fff; margin-bottom: 1rem; }
+        .faq-header { padding: 1.5rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; background: #fff; }
+        .faq-header h4 { font-size: 1.05rem; font-weight: 600; margin: 0; color: var(--text-dark); }
+        .faq-body { max-height: 0; overflow: hidden; padding: 0 1.5rem; color: var(--text-gray); transition: all 0.3s ease; }
+        .faq-item.active { border-color: var(--primary); box-shadow: var(--shadow-soft); }
+        .faq-item.active .faq-header { color: var(--primary); }
+        .faq-item.active .faq-body { max-height: 150px; padding-bottom: 1.5rem; }
+        .faq-icon { transition: 0.3s; color: var(--text-gray); }
+        .faq-item.active .faq-icon { transform: rotate(180deg); color: var(--primary); }
+
+        .contact-wrapper { padding: 3rem; background: #fff; }
+        .contact-header h3 { font-size: 2rem; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 700; }
+        .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; }
+        .form-group label { font-size: 0.9rem; margin-bottom: 0.5rem; color: var(--text-dark); font-weight: 700; }
+        .form-control { background: #f8fafc; border: 1px solid #cbd5e1; padding: 1rem; border-radius: 10px; color: var(--text-dark); width: 100%; transition: 0.3s; }
+        .form-control:focus { border-color: var(--primary); background: #fff; box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1); outline: none; }
+        .submit-btn { width: 100%; margin-top: 1.5rem; color: #fff; background: var(--text-dark); border-radius: 10px; padding: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; border: none; }
+        .submit-btn:hover { background: var(--primary); transform: translateY(-3px); }
+
+        /* =========================================
+           13. FOOTER (PITCH BLACK + HIGH CONTRAST)
+           ========================================= */
+        footer { 
+            background: var(--bg-footer); /* #000000 */
+            padding: 5rem 10% 2rem; 
+            color: #94a3b8;
+            /* Power Line Top Border */
+            border-top: 4px solid var(--primary);
+        }
+        .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4rem; margin-bottom: 4rem; }
+        
+        .footer-col h4 { 
+            color: #fff; font-size: 1.2rem; margin-bottom: 1.5rem; font-weight: 700; 
+            position: relative; padding-bottom: 12px; 
+        }
+        /* Footer Accent Line */
+        .footer-col h4::after { content: ''; position: absolute; left: 0; bottom: 0; width: 40px; height: 3px; background: var(--primary); border-radius: 2px; }
+        
+        .footer-logo { font-size: 2rem; font-weight: 800; color: #fff; margin-bottom: 1rem; letter-spacing: -1px; }
+        .footer-logo span { color: var(--primary); }
+        .brand-desc { font-size: 0.9rem; line-height: 1.6; margin-bottom: 1.5rem; color: #9ca3af; }
+        
+        .social-btn { 
+            width: 45px; height: 45px; background: rgba(255,255,255,0.1); 
+            display: flex; align-items: center; justify-content: center; 
+            border-radius: 50%; transition: all 0.3s ease; color: #fff; 
+            font-size: 1.2rem; margin-right: 10px; display: inline-flex; 
+        }
+        .social-btn:hover { background: var(--primary); color: #fff; transform: translateY(-3px); box-shadow: 0 0 15px rgba(16, 185, 129, 0.5); }
+        
+        .footer-col ul li { margin-bottom: 1rem; }
+        .footer-col ul li a { transition: all 0.3s ease; display: inline-block; color: #cbd5e1; font-weight: 500; }
+        .footer-col ul li a:hover { color: var(--primary); transform: translateX(5px); }
+        
+        .contact-info li { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 1.2rem; color: #cbd5e1; }
+        .contact-info i { color: var(--primary); margin-top: 5px; font-size: 1.1rem; }
+        
+        .app-btn { 
+            display: flex; align-items: center; gap: 10px; 
+            background: rgba(255,255,255,0.08); padding: 10px 15px; 
+            border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); 
+            transition: var(--trans); margin-bottom: 10px; color: #fff; 
+        }
+        .app-btn:hover { border-color: var(--primary); background: rgba(255,255,255,0.15); }
+        .app-text span { font-size: 0.65rem; color: #9ca3af; display: block; line-height: 1; }
+        .app-text strong { font-size: 0.9rem; color: #fff; }
+        
+        .footer-bottom { text-align: center; border-top: 1px solid #1e293b; padding-top: 2rem; font-size: 0.85rem; color: #64748b; }
+        .footer-bottom span { color: var(--primary); font-weight: 700; }
+
+        /* WHATSAPP PULSE */
+        .whatsapp-float { 
+            position: fixed; bottom: 30px; right: 30px; width: 65px; height: 65px; 
+            background: #25D366; border-radius: 50%; display: flex; align-items: center; 
+            justify-content: center; font-size: 35px; 
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4); 
+            z-index: 99999; color: #fff; animation: pulse-green 2s infinite; 
+        }
+        @keyframes pulse-green {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* RESPONSIVE */
+        @media (min-width: 992px) { .desktop-link { display: block !important; } .mobile-link { display: none !important; } }
+        @media (max-width: 991px) { .desktop-link { display: none !important; } .mobile-link { display: block !important; } }
+        @media (max-width: 768px) {
+            .navbar { padding: 0 5%; }
+            .hamburger { display: block; }
+            .nav-links { 
+                position: absolute; top: 80px; left: 0; width: 100%; 
+                background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);
+                flex-direction: column; align-items: center; padding: 2rem 0; 
+                transform: translateY(-150%); transition: 0.5s ease; 
+                border-bottom: 1px solid #e2e8f0; box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            }
+            .nav-links.active { transform: translateY(0); }
+            .hero-content h1 { font-size: 2.8rem; }
+            .stats-wrapper { margin-top: 0; position: relative; bottom: auto; left: auto; transform: none; width: 100%; padding: 2rem 0; }
+            .stats-card { flex-direction: column; gap: 2rem; }
+            .about-split, .footer-container { grid-template-columns: 1fr; gap: 3rem; }
+            .about-text { padding-right: 0; }
+            .support-grid, .video-wrapper { grid-template-columns: 1fr; }
+            .video-wrapper { height: auto; }
+            .main-video-container { height: 250px; }
+            .playlist-container { height: 300px; }
+            .testi-card { width: 300px; padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preloader">
+        <div class="loader-content">
+            <div class="loader-logo">GTHINK <span>INVENTORS</span></div>
+            <div class="loader-line"></div>
+        </div>
+    </div>
+
+    <nav class="navbar">
+        <div class="logo">Gthink <span>Inventors</span></div>
+        <ul class="nav-links">
+            <li><a href="#home" onclick="closeMenu()">Home</a></li>
+            <li><a href="#solutions" onclick="closeMenu()">Solutions</a></li>
+            <li><a href="#products" onclick="closeMenu()">Products</a></li> 
+            <li><a href="#videos" onclick="closeMenu()">Videos</a></li>
+            <li><a href="#reviews" onclick="closeMenu()">Reviews</a></li>
+            <li><a href="#about" onclick="closeMenu()">About</a></li>
+            <li class="desktop-link"><a href="#support" onclick="closeMenu()">FAQ & Contact</a></li>
+            <li class="mobile-link"><a href="#faq-wrapper" onclick="closeMenu()">FAQ</a></li>
+            <li class="mobile-link"><a href="#contact-wrapper" onclick="closeMenu()">Contact</a></li>
+        </ul>
+        <div class="hamburger" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+        <a href="#support" class="btn-nav desktop-link">Get Started</a>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-slider">
+            <div class="hero-slide active" style="background-image: url('https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1557324232-b8917d3c3dcb?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+            <div class="hero-slide" style="background-image: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');"></div>
+        </div>
+        <div class="hero-overlay"></div>
+        <div class="hero-content reveal">
+            <div class="hero-badge">Next Gen Automation</div>
+            <h1>Smart Living.<br><span>Redefined.</span></h1>
+            <p>Experience the seamless integration of eco-friendly luxury and digital technology.</p>
+            <a href="#solutions" class="btn-primary">Explore Solutions</a>
+        </div>
+    </section>
+
+    <div class="stats-wrapper reveal">
+        <div class="stats-card">
+            <div class="stat-item"><h2 class="counter" data-target="500">0</h2><p>Homes Automated</p></div>
+            <div class="stat-item"><h2 class="counter" data-target="24">0</h2><p>Hours Support</p></div>
+            <div class="stat-item"><h2 class="counter" data-target="100">0</h2><p>% Secure Networks</p></div>
+        </div>
+    </div>
+
+    <section id="solutions" class="solutions">
+        <div class="separator-line"></div>
+        <div class="section-header reveal"><span>Industries We Serve</span><h2>Automation Verticals</h2></div>
+        <div class="sectors-grid">
+            <div class="luxe-card sector-card reveal delay-100">
+                <img src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Home" class="sector-bg">
+                <div class="sector-overlay"></div>
+                <div class="sector-content">
+                    <div class="sector-icon"><i class="fas fa-home"></i></div>
+                    <h3>Home Automation</h3><p>Turn your residence into a thinking environment.</p>
+                    <ul class="sector-features"><li><i class="fas fa-check"></i> Smart Lighting</li><li><i class="fas fa-check"></i> Security</li></ul>
+                </div>
+            </div>
+            <div class="luxe-card sector-card reveal delay-200">
+                <img src="https://images.unsplash.com/photo-1618773928121-c32242e63f39?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Hotel" class="sector-bg">
+                <div class="sector-overlay"></div>
+                <div class="sector-content">
+                    <div class="sector-icon"><i class="fas fa-hotel"></i></div>
+                    <h3>Hotel Automation</h3><p>Elevate guest experience with touchless controls.</p>
+                    <ul class="sector-features"><li><i class="fas fa-check"></i> Guest Room Mgmt</li><li><i class="fas fa-check"></i> Digital Check-in</li></ul>
+                </div>
+            </div>
+            <div class="luxe-card sector-card reveal delay-300">
+                <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Office" class="sector-bg">
+                <div class="sector-overlay"></div>
+                <div class="sector-content">
+                    <div class="sector-icon"><i class="fas fa-building"></i></div>
+                    <h3>Office Automation</h3><p>Create a productive, secure, and energy-efficient workspace.</p>
+                    <ul class="sector-features"><li><i class="fas fa-check"></i> Room Booking</li><li><i class="fas fa-check"></i> Biometric Access</li></ul>
+                </div>
+            </div>
+            <div class="luxe-card sector-card reveal delay-400">
+                <img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1000&q=80" alt="Hospital" class="sector-bg">
+                <div class="sector-overlay"></div>
+                <div class="sector-content">
+                    <div class="sector-icon"><i class="fas fa-heartbeat"></i></div>
+                    <h3>Hospital Automation</h3><p>Enhance patient care with smart monitoring.</p>
+                    <ul class="sector-features"><li><i class="fas fa-check"></i> Nurse Call</li><li><i class="fas fa-check"></i> Asset Tracking</li></ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="products" class="products">
+        <div class="separator-line"></div>
+        <div class="section-header reveal"><span>Our Innovation</span><h2>Flagship Hardware</h2></div>
+        <div class="product-grid">
+            <div class="luxe-card pro-card reveal delay-100">
+                <div class="pro-img-box"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="G-Switch"></div>
+                <div class="pro-card-content">
+                    <div><span class="tag">Retrofit</span><h3>G-Switch Module</h3><p>Smartify standard switchboards.</p></div>
+                    <button class="pro-btn">View Specs</button>
+                </div>
+            </div>
+            <div class="luxe-card pro-card reveal delay-200">
+                <div class="pro-img-box"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Touch Panels"></div>
+                <div class="pro-card-content">
+                    <div><span class="tag">Glass</span><h3>Smart Touch Panels</h3><p>Sleek, capacitive glass interfaces.</p></div>
+                    <button class="pro-btn">View Specs</button>
+                </div>
+            </div>
+            <div class="luxe-card pro-card reveal delay-300">
+                <div class="pro-img-box"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Curtains"></div>
+                <div class="pro-card-content">
+                    <div><span class="tag">Motorized</span><h3>Curtain Control</h3><p>Automated natural lighting.</p></div>
+                    <button class="pro-btn">View Specs</button>
+                </div>
+            </div>
+            <div class="luxe-card pro-card reveal delay-400">
+                <div class="pro-img-box"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Stairs"></div>
+                <div class="pro-card-content">
+                    <div><span class="tag">Motion</span><h3>Staircase Lighting</h3><p>Illumination that follows you.</p></div>
+                    <button class="pro-btn">View Specs</button>
+                </div>
+            </div>
+            <div class="luxe-card pro-card reveal delay-100">
+                <div class="pro-img-box"><img src="https://images.unsplash.com/photo-1563089145-599997674d42?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="RGBW"></div>
+                <div class="pro-card-content">
+                    <div><span class="tag">16M Colors</span><h3>RGBW Controller</h3><p>Set mood lighting via app.</p></div>
+                    <button class="pro-btn">View Specs</button>
+                </div>
+            </div>
+            <div class="luxe-card pro-card reveal delay-200">
+                <div class="pro-img-box"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Lock"></div>
+                <div class="pro-card-content">
+                    <div><span class="tag">Biometric</span><h3>Fingerprint Locks</h3><p>Keyless entry security.</p></div>
+                    <button class="pro-btn">View Specs</button>
+                </div>
+            </div>
+            <div class="luxe-card pro-card reveal delay-300">
+                <div class="pro-img-box"><img src="https://images.unsplash.com/photo-1513694203232-719a280e022f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Gate"></div>
+                <div class="pro-card-content">
+                    <div><span class="tag">Access</span><h3>Smart Gate</h3><p>Remote automated entry.</p></div>
+                    <button class="pro-btn">View Specs</button>
+                </div>
+            </div>
+            <div class="luxe-card pro-card reveal delay-400">
+                <div class="pro-img-box"><img src="https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Wardrobe"></div>
+                <div class="pro-card-content">
+                    <div><span class="tag">Luxury</span><h3>Smart Wardrobe</h3><p>Auto-lighting and sensors.</p></div>
+                    <button class="pro-btn">View Specs</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="videos" class="video-section">
+        <div class="separator-line"></div>
+        <div class="section-header reveal"><span>Experience Automation</span><h2>Video Catalogue</h2></div>
+        
+        <div class="video-wrapper reveal">
+            <div class="main-video-container">
+                <iframe id="mainPlayer" class="main-video-frame" src="https://www.youtube.com/embed/_lnA8sC6zKE?rel=0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            
+            <div class="playlist-container">
+                <div class="playlist-header">Playlist</div>
+                <div class="playlist-list">
+                    <div class="playlist-item active" onclick="playVideo('_lnA8sC6zKE', this)">
+                        <div class="playlist-thumb-box"><img src="https://img.youtube.com/vi/_lnA8sC6zKE/default.jpg" class="playlist-thumb"><div class="play-overlay"><i class="fas fa-play"></i></div></div>
+                        <div class="playlist-info"><h4>Smart Home Experience</h4><span>Gthink Inventors</span></div>
+                    </div>
+                    <div class="playlist-item" onclick="playVideo('j71NK-wM8xs', this)">
+                        <div class="playlist-thumb-box"><img src="https://img.youtube.com/vi/j71NK-wM8xs/default.jpg" class="playlist-thumb"><div class="play-overlay"><i class="fas fa-play"></i></div></div>
+                        <div class="playlist-info"><h4>Smart Switches Demo</h4><span>Gthink Inventors</span></div>
+                    </div>
+                    <div class="playlist-item" onclick="playVideo('U8zAu3TnFkE', this)">
+                        <div class="playlist-thumb-box"><img src="https://img.youtube.com/vi/U8zAu3TnFkE/default.jpg" class="playlist-thumb"><div class="play-overlay"><i class="fas fa-play"></i></div></div>
+                        <div class="playlist-info"><h4>Digital Door Locks</h4><span>Gthink Inventors</span></div>
+                    </div>
+                    <div class="playlist-item" onclick="playVideo('Jc90XFSGtC8', this)">
+                        <div class="playlist-thumb-box"><img src="https://img.youtube.com/vi/Jc90XFSGtC8/default.jpg" class="playlist-thumb"><div class="play-overlay"><i class="fas fa-play"></i></div></div>
+                        <div class="playlist-info"><h4>Automated Curtains</h4><span>Gthink Inventors</span></div>
+                    </div>
+                    <div class="playlist-item" onclick="playVideo('-vtLgqu8es4', this)">
+                        <div class="playlist-thumb-box"><img src="https://img.youtube.com/vi/-vtLgqu8es4/default.jpg" class="playlist-thumb"><div class="play-overlay"><i class="fas fa-play"></i></div></div>
+                        <div class="playlist-info"><h4>Smart Gate System</h4><span>Gthink Inventors</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="reviews" class="testimonials">
+        <div class="separator-line"></div>
+        <div class="section-header reveal"><span>What Clients Say</span><h2>Success Stories</h2></div>
+        <div class="testi-scroller-container">
+            <div class="testi-track">
+                <div class="luxe-card testi-card">
+                    <i class="fas fa-quote-right quote-icon"></i><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testi-text">"Gthink transformed our villa completely. The retrofit G-Switch modules meant we didn't have to break any walls."</p>
+                    <div class="testi-author"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="author-avatar"><div class="author-info"><h4>Rajesh Kumar</h4><span>Homeowner</span></div></div>
+                </div>
+                <div class="luxe-card testi-card">
+                    <i class="fas fa-quote-right quote-icon"></i><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testi-text">"We installed Hotel Automation in our new wing. Guest feedback on the touch panels has been phenomenal."</p>
+                    <div class="testi-author"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="author-avatar"><div class="author-info"><h4>Anita Desai</h4><span>Hotel GM</span></div></div>
+                </div>
+                <div class="luxe-card testi-card">
+                    <i class="fas fa-quote-right quote-icon"></i><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testi-text">"The RGBW controllers for our office facade lighting are brilliant. The app is intuitive and support is solid."</p>
+                    <div class="testi-author"><img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?lib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="author-avatar"><div class="author-info"><h4>Vikram Singh</h4><span>TechSpace</span></div></div>
+                </div>
+                <div class="luxe-card testi-card">
+                    <i class="fas fa-quote-right quote-icon"></i><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testi-text">"As an architect, I love how Gthink integrates seamlessly into my designs without bulky hardware."</p>
+                    <div class="testi-author"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="author-avatar"><div class="author-info"><h4>Arun Reddy</h4><span>Architect</span></div></div>
+                </div>
+                <div class="luxe-card testi-card">
+                    <i class="fas fa-quote-right quote-icon"></i><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testi-text">"Ease of use for the elderly is unmatched. Voice control works perfectly."</p>
+                    <div class="testi-author"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="author-avatar"><div class="author-info"><h4>Meera Kapoor</h4><span>User</span></div></div>
+                </div>
+                <div class="luxe-card testi-card">
+                    <i class="fas fa-quote-right quote-icon"></i><div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                    <p class="testi-text">"Integrated gate and lock system gives us total peace of mind."</p>
+                    <div class="testi-author"><img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&auto=format&fit=crop&w=100&q=80" class="author-avatar"><div class="author-info"><h4>John Mathew</h4><span>Business Owner</span></div></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="about-story">
+        <div class="separator-line"></div>
+        <div class="section-header reveal"><span>About Us</span><h2>Who We Are</h2></div>
+        <div class="about-wrapper">
+            <div class="about-split">
+                <div class="about-text reveal">
+                    <h3>We Don't Just Automate.<br>We Innovate.</h3>
+                    <p>Gthink Inventors began with a simple question: <em>Why can't our homes take care of us?</em> What started as a small project by three passionate engineers has evolved into a leading force in domestic IoT solutions.</p>
+                    <div class="story-highlight">"Our mission is to create a home that feels like a living, breathing entity."</div>
+                </div>
+                <div class="about-visual reveal delay-200">
+                    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="About Gthink" class="about-img">
+                </div>
+            </div>
+            <div class="team-grid reveal delay-300">
+                <div class="luxe-card team-card">
+                    <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="CEO">
+                    <h4>Arjun Mehta</h4><span>Founder & CEO</span>
+                </div>
+                <div class="luxe-card team-card">
+                    <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="CPO">
+                    <h4>Priya Sharma</h4><span>Product Head</span>
+                </div>
+                <div class="luxe-card team-card">
+                    <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Innovation">
+                    <h4>Rohan Das</h4><span>Innovation</span>
+                </div>
+                <div class="luxe-card team-card">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=200&q=80" alt="Tech">
+                    <h4>Vikram Singh</h4><span>Tech Lead</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="support" class="support-section">
+        <div class="separator-line"></div>
+        <div class="section-header reveal"><span>Get In Touch</span><h2>Support Hub</h2></div>
+        
+        <div class="support-grid">
+            <div id="faq-wrapper" class="faq-wrapper reveal delay-100">
+                <div class="luxe-card faq-item active" onclick="toggleFaq(this)">
+                    <div class="faq-header"><h4>Does this require rewiring?</h4><i class="fas fa-chevron-down faq-icon"></i></div>
+                    <div class="faq-body">No, our G-Switch modules are designed for retrofit. They fit behind your existing switchboards without any structural changes.</div>
+                </div>
+                <div class="luxe-card faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-header"><h4>Does it work without internet?</h4><i class="fas fa-chevron-down faq-icon"></i></div>
+                    <div class="faq-body">Yes, basic local control works via physical switches. However, app control and voice commands require WiFi.</div>
+                </div>
+                <div class="luxe-card faq-item" onclick="toggleFaq(this)">
+                    <div class="faq-header"><h4>What happens if power goes out?</h4><i class="fas fa-chevron-down faq-icon"></i></div>
+                    <div class="faq-body">Our devices have memory retention. When power returns, they restore to their last state (or OFF, based on settings).</div>
+                </div>
+            </div>
+
+            <div id="contact-wrapper" class="luxe-card contact-wrapper reveal delay-200">
+                <div class="contact-header">
+                    <h3>Request Consultation</h3>
+                    <p>Fill out the form below and we will get back to you.</p>
+                </div>
+                <form id="contactForm">
+                    <div class="form-group"><label>Name</label><input type="text" class="form-control" placeholder="John Doe" required></div>
+                    <div class="form-group"><label>Email</label><input type="email" class="form-control" placeholder="john@example.com" required></div>
+                    <div class="form-group"><label>Phone</label><input type="tel" class="form-control" placeholder="+91 90000 12345" required></div>
+                    <div class="form-group"><label>Interest</label><select class="form-control"><option>G-Switch</option><option>Touch Panels</option><option>Full Home Automation</option></select></div>
+                    <div class="form-group"><label>Details</label><textarea class="form-control" placeholder="Tell us about your requirements..."></textarea></div>
+                    <button type="submit" class="submit-btn btn-nav">Submit Request</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-container">
+            <div class="footer-col footer-brand">
+                <div class="footer-logo">Gthink <span>Inventors</span></div>
+                <p class="brand-desc">Reinventing the way you live with AI and IoT.</p>
+                <div class="socials">
+                    <a href="#" class="social-btn"><i class="fab fa-youtube"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-instagram"></i></a>
+                    <a href="#" class="social-btn"><i class="fab fa-linkedin-in"></i></a>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>Quick Links</h4>
+                <ul class="footer-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#solutions">Solutions</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#reviews">Reviews</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Contact</h4>
+                <ul class="contact-info">
+                    <li><i class="fas fa-map-marker-alt"></i> Hi-Tech City, Hyderabad</li>
+                    <li><i class="fas fa-phone"></i> +91 90000 12345</li>
+                    <li><i class="fas fa-envelope"></i> hello@gthink.com</li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>Get App</h4>
+                <div class="app-links">
+                    <a href="#" class="app-btn"><i class="fab fa-apple app-icon"></i><div class="app-text"><span>Download on</span><strong>App Store</strong></div></a>
+                    <a href="#" class="app-btn"><i class="fab fa-google-play app-icon"></i><div class="app-text"><span>Get it on</span><strong>Google Play</strong></div></a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 Gthink Inventors. Engineered for the <span>Future</span>.</p>
+        </div>
+    </footer>
+
+    <a href="https://wa.me/919000012345" class="whatsapp-float" target="_blank"><i class="fab fa-whatsapp"></i></a>
+
+    <script>
+        window.onload = () => { setTimeout(() => { document.querySelector('.preloader').classList.add('fade-out'); }, 1500); };
+        function toggleMenu() { document.querySelector('.nav-links').classList.toggle('active'); }
+        function closeMenu() { document.querySelector('.nav-links').classList.remove('active'); }
+        
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.hero-slide');
+        setInterval(() => {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }, 3500);
+
+        function toggleFaq(element) { element.classList.toggle('active'); }
+        document.getElementById('contactForm').addEventListener('submit', function(e) { e.preventDefault(); alert('Request Sent!'); this.reset(); });
+
+        /* VIDEO PLAYLIST SCRIPT */
+        function playVideo(videoId, element) {
+            // Update Iframe
+            const iframe = document.getElementById('mainPlayer');
+            iframe.src = `https://www.youtube.com/embed/${videoId}?rel=0&autoplay=1`;
+            
+            // Update Active State in List
+            document.querySelectorAll('.playlist-item').forEach(item => item.classList.remove('active'));
+            element.classList.add('active');
+        }
+
+        window.addEventListener('load', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        if (entry.target.classList.contains('stats-wrapper')) {
+                            document.querySelectorAll('.counter').forEach(c => {
+                                const t = +c.getAttribute('data-target');
+                                const inc = t / 50;
+                                const update = () => {
+                                    const val = +c.innerText;
+                                    if(val < t) { c.innerText = Math.ceil(val + inc); setTimeout(update, 30); }
+                                    else { c.innerText = t + "+"; }
+                                };
+                                update();
+                            });
+                        }
+                    }
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+        });
+    </script>
+</body>
+</html>
